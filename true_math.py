@@ -1,45 +1,51 @@
-class Horse:
-    x_distance = 0
+class IncorrectCarNumbers(Exception):
+    def __init__(self, message):
+        self.message=message
+class IncorrectVinNumber(Exception):
+    def __init__(self, message):
+        self.message=message
+class Car:
+    def __init__(self, model, __vin, __numbers):
+        self.model=model
+        def __is_Valid_vin():
+            if not isinstance(__vin, int):
+                raise IncorrectVinNumber('Некорректный тип vin номер')
+            elif __vin<1000000 or __vin>9999999:
+                raise IncorrectVinNumber('Неверный диапазон для vin номера')
+            else:
+                return True
+        def __is_Valid_numbers():
+            if not isinstance(__numbers, str):
+                raise IncorrectCarNumbers('Некорректный тип данных для номеров')
+            elif len(__numbers)!=6:
+                raise IncorrectCarNumbers('Неверная длина номера')
+            else:
+                return True
+        __is_Valid_vin()
+        __is_Valid_numbers()
+try:
+  first = Car('Model1', 1000000, 'f123dj')
+except IncorrectVinNumber as exc:
+  print(exc.message)
+except IncorrectCarNumbers as exc:
+  print(exc.message)
+else:
+  print(f'{first.model} успешно создан')
 
-    def __init__(self):
-        self.sound = 'Frrr'
+try:
+  second = Car('Model2', 300, 'т001тр')
+except IncorrectVinNumber as exc:
+  print(exc.message)
+except IncorrectCarNumbers as exc:
+  print(exc.message)
+else:
+  print(f'{second.model} успешно создан')
 
-    def run(self, dx):
-        self.x_distance += dx
-
-
-class Eagle:
-    y_distance = 0
-
-    def __init__(self):
-        self.sound = 'I train, eat, sleep, and repeat'
-
-    def fly(self, dy):
-        self.y_distance += dy
-
-
-class Pegasus(Horse, Eagle):
-    def __init__(self):
-        Horse.__init__(self)
-        Eagle.__init__(self)
-
-    def move(self, dx, dy):
-        super().run(dx)
-        super().fly(dy)
-
-    def get_pos(self):
-        return (self.x_distance, self.y_distance)
-
-    def voice(self):
-        print(self.sound)
-
-
-p1 = Pegasus()
-
-print(p1.get_pos())
-p1.move(10, 15)
-print(p1.get_pos())
-p1.move(-5, 20)
-print(p1.get_pos())
-
-p1.voice()
+try:
+  third = Car('Model3', 2020202, 'нет номера')
+except IncorrectVinNumber as exc:
+  print(exc.message)
+except IncorrectCarNumbers as exc:
+  print(exc.message)
+else:
+  print(f'{third.model} успешно создан')

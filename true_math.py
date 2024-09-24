@@ -1,51 +1,43 @@
-class IncorrectCarNumbers(Exception):
-    def __init__(self, message):
-        self.message=message
-class IncorrectVinNumber(Exception):
-    def __init__(self, message):
-        self.message=message
-class Car:
-    def __init__(self, model, __vin, __numbers):
-        self.model=model
-        def __is_Valid_vin():
-            if not isinstance(__vin, int):
-                raise IncorrectVinNumber('Некорректный тип vin номер')
-            elif __vin<1000000 or __vin>9999999:
-                raise IncorrectVinNumber('Неверный диапазон для vin номера')
-            else:
-                return True
-        def __is_Valid_numbers():
-            if not isinstance(__numbers, str):
-                raise IncorrectCarNumbers('Некорректный тип данных для номеров')
-            elif len(__numbers)!=6:
-                raise IncorrectCarNumbers('Неверная длина номера')
-            else:
-                return True
-        __is_Valid_vin()
-        __is_Valid_numbers()
-try:
-  first = Car('Model1', 1000000, 'f123dj')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{first.model} успешно создан')
+from threading import Thread
+from time import sleep
+from datetime import datetime
 
-try:
-  second = Car('Model2', 300, 'т001тр')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{second.model} успешно создан')
+def writes_words(word_cout, file_name):
+    for i in range(word_cout):
+        if i==0:
+            file=open(file_name, 'w')
+            file.write(f'Какое-то слово № {str(i+1)}')
+            sleep(0.1)
+        else:
+            file=open(file_name, 'a')
+            file.write('\n'+f'Какое-то слово № {str(i+1)}')
+            sleep(0.1)
+    print(f'Завершилась запись в файл {file_name}')
 
-try:
-  third = Car('Model3', 2020202, 'нет номера')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{third.model} успешно создан')
+a=datetime.now()
+
+writes_words(10, 'example1.txt')
+writes_words(30, 'example2.txt')
+writes_words(200, 'example3.txt')
+writes_words(100, 'example4.txt')
+
+print(f'Работа потоков {datetime.now()-a}')
+
+s_first=Thread(target=writes_words, args=(10, 'example5.txt'))
+s_se=Thread(target=writes_words, args=(30, 'example6.txt'))
+s_th=Thread(target=writes_words, args=(200, 'example7.txt'))
+s_fo=Thread(target=writes_words, args=(100, 'example8.txt'))
+
+a=datetime.now()
+
+s_first.start()
+s_se.start()
+s_th.start()
+s_fo.start()
+
+s_first.join()
+s_se.join()
+s_th.join()
+s_fo.join()
+
+print(f'Работа потоков {datetime.now()-a}')
